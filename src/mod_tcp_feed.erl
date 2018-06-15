@@ -42,8 +42,8 @@ start_client() ->
     case os:getenv(?WALLAROO_ENDPOINT) of
         false -> error("env var " ++ ?WALLAROO_ENDPOINT ++ " not set");
         HostPort ->
-            [Host, Port] = string:split(HostPort, ":"),
-            {ok, Pid} = gen_tcp:connect(Host, list_to_integer(Port), []),
+            [Host, Port] = binary:split(l2b(HostPort), <<":">>),
+            {ok, Pid} = gen_tcp:connect(b2l(Host), list_to_integer(b2l(Port)), []),
             true = erlang:register(?CLIENT, Pid),
             Pid
     end.
@@ -63,3 +63,6 @@ make_event(BinFrom, BinStanza, POSIXMilliseconds)
     Size = byte_size(Bin),
     <<Size:32, Bin/binary>>.
 
+
+l2b(L) -> list_to_binary(L).
+b2l(B) -> binary_to_list(B).
