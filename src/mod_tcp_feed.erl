@@ -29,7 +29,7 @@ hooks(Host) ->
 forward_stanza(Acc, From, _To, #xmlel{} = Stanza) ->
     BinStanza = exml:to_binary(Stanza),
     BinJid = jid:to_binary(From),
-    Event = make_event(BinJid, BinStanza, erlang:system_time(millisecond)),
+    Event = make_event(BinJid, BinStanza, erlang:system_time(1000)),
     try
         gen_tcp:send(ensure_client(), Event),
         Acc
