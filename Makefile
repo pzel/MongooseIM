@@ -1,4 +1,4 @@
-.PHONY: rel
+.PHONY: rel build-image
 LOG=$(subst TARGET,$@,TARGET.log 2>&1 || (cat TARGET.log; exit 1))
 SILENCE_COVER =  | grep -v "logs.*\\.coverdata"
 SILENCE_COVER += | grep -v "Analysis includes data from imported files"
@@ -13,6 +13,9 @@ DEVNODES = mim1 mim2 mim3 fed1 reg1
 all: rel
 
 dev: $(DEVNODES)
+
+build-image:
+	docker build -t pzel/spamdetector-chat:latest .
 
 clean:
 	-rm -rf _build
